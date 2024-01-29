@@ -1,0 +1,115 @@
+﻿<Window x:Class="OrdenacionsPart1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OrdenacionsPart1"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="Ordenacions" Height="800" Width="1000">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Name="panellConfiguracio" Background="Black">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    <Border Background="Purple" Margin="0,0,0,10">
+                        <Label Margin="20,15,20,15" Content="Configuració" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center"/>
+                    </Border>
+
+                    <Border Background="Purple">
+                        <Label Margin="10,0,0,0" Content="General" FontWeight="Bold" FontSize="15" Foreground="White"/>
+                    </Border>
+
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Nº d'elements: " Foreground="Purple" FontWeight="Bold"/>
+                        <xctk:IntegerUpDown DockPanel.Dock="Left"  Value="5" Minimum="5" Maximum="500"  Name="iudNElements" />
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Gruix del marc " Foreground="Purple" FontWeight="Bold"/>
+                        <xctk:IntegerUpDown DockPanel.Dock="Left"  Value="5" Minimum="0" Maximum="50" ValueChanged="iudGruixMarc_ValueChanged"  Name="iudGruixMarc" />
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Radi de les columnes " Foreground="Purple" FontWeight="Bold"/>
+                        <xctk:IntegerUpDown DockPanel.Dock="Left"  Value="5" Minimum="0" Maximum="100" ValueChanged="iudRadiColumnes_ValueChanged"  Name="iudRadiColumnes" />
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Temps Pausa " Foreground="Purple" FontWeight="Bold"/>
+                        <xctk:IntegerUpDown DockPanel.Dock="Left" Value="500" Minimum="0" Maximum="10000"  Name="iudTempsPausa" />
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Marca Intercanvis " Foreground="Purple" FontWeight="Bold"/>
+                        <CheckBox Margin="10,0" Name="cbMarcaIntercanvis" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                    <Label Content="Tipus de figures" FontSize="10" Foreground="Purple"/>
+                    <ComboBox Name="cbTipusFigura" HorizontalAlignment="Stretch" SelectionChanged="cbTipusFigura_SelectionChanged" Margin="10,0" Foreground="Purple" BorderBrush="Purple" Background="Black">
+                        <ComboBoxItem Content="Barres" IsSelected="True"/>
+                        <ComboBoxItem Content="Punts"/>
+                    </ComboBox>
+                    <Label Content="Tipus d'ordenació" FontSize="10" Foreground="Purple"/>
+                    <!--Falta posar el contingut del combobox -->
+                    <ComboBox Name="cbTipusAlgoritme" HorizontalAlignment="Stretch" Margin="10,0,10,15"  Foreground="Purple" BorderBrush="Purple" Background="Black">
+                        <ComboBoxItem Content="Bubble Sort" Name="cbiBubble" IsSelected="True"/>
+                        <ComboBoxItem Content="Insertion Sort" Name="cbiInsertion"/>
+                        <ComboBoxItem Content="Quick Sort" Name="cbiQuick"/>
+                    </ComboBox>
+
+                    <Border Background="Purple">
+                        <Label Margin="10,0,0,0" Content="Disposicio inicial" FontWeight="Bold" FontSize="15" Foreground="White"/>
+                    </Border>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Invertit" Foreground="Purple" FontWeight="Bold"/>
+                        <CheckBox Margin="10,0" Name="cbInvertit" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Aleatori" Foreground="Purple" FontWeight="Bold"/>
+                        <CheckBox Margin="10,0" Name="cbAleatori" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </DockPanel>
+
+                    <Border Background="Purple">
+                        <Label Margin="10,0,0,0" Content="Colors" FontWeight="Bold" FontSize="15" Foreground="White"/>
+                    </Border>
+
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Correcte" Foreground="Purple" FontWeight="Bold"/>
+                        <xctk:ColorPicker SelectedColor="Green" SelectedColorChanged="cpCorrecte_SelectedColorChanged" Name="cpCorrecte" Background="Transparent" BorderBrush="Transparent"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Incorrecte" Foreground="Purple" FontWeight="Bold"/>
+                        <xctk:ColorPicker SelectedColor="DarkRed" SelectedColorChanged="cpIncorrecte_SelectedColorChanged" Name="cpIncorrecte" Background="Transparent" BorderBrush="Transparent"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Intercanviar" Foreground="Purple" FontWeight="Bold"/>
+                        <xctk:ColorPicker SelectedColor="Yellow" SelectedColorChanged="cpIntercanviar_SelectedColorChanged"  Name="cpIntercanviar" Background="Transparent" BorderBrush="Transparent"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Fons" Foreground="Purple" FontWeight="Bold"/>
+                        <xctk:ColorPicker SelectedColor="LightGray" SelectedColorChanged="cpFons_SelectedColorChanged" Name="cpFons" Background="Transparent" BorderBrush="Transparent"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Brillo del marc" Foreground="Purple" FontWeight="Bold"/>
+                        <xctk:ColorPicker SelectedColor="Black" SelectedColorChanged="cpBrilloMarc_SelectedColorChanged" Name="cpBrilloMarc" Background="Transparent" BorderBrush="Transparent"/>
+                    </DockPanel>
+                </StackPanel>
+                
+            </ScrollViewer>
+        </DockPanel>
+        <DockPanel Grid.Column="1">
+            <DockPanel DockPanel.Dock="Top" Background="Purple">
+                <DockPanel DockPanel.Dock="Top">
+                    <Label  Content="Ordenació" DockPanel.Dock="Left" Foreground="White" FontSize="20" FontWeight="Bold" Margin="10,0,0,0"/>
+                    <Button DockPanel.Dock="Right" Margin="10,5" Content="Genera" Name="btnGenera" Click="btnGenera_Click" Background="Transparent" BorderBrush="Transparent" Foreground="White" FontWeight="Bold" FontSize="12"/>
+                    <Button DockPanel.Dock="Right" Margin="10,5" Content="Ordena" Name="btnOrdena" Click="btnOrdena_Click"  Background="Transparent" BorderBrush="Transparent" Foreground="White" FontWeight="Bold" FontSize="12"/>
+                    <Button DockPanel.Dock="Right" Margin="10,5" Content="Atura" Name="btnAtura" Click="btnAtura_Click"  Background="Transparent" BorderBrush="Transparent" Foreground="White" FontWeight="Bold" FontSize="12"/>
+                    <TextBlock/>
+                </DockPanel>
+            </DockPanel>
+            
+            <Viewbox>
+                <Canvas Width="1000" Height="1000" DockPanel.Dock="Top" x:Name="canvas" Background="White"/>
+            </Viewbox>
+        </DockPanel>
+    </Grid>
+</Window>
