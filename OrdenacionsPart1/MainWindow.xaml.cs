@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -22,6 +23,9 @@ namespace OrdenacionsPart1
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+    
+
     public partial class MainWindow : Window
     {
         #region Atributs
@@ -44,7 +48,19 @@ namespace OrdenacionsPart1
             numeros = new List<int>();
 
             InitializeComponent();
+
             canvas.Background = fonsBrush;
+            cbTipusFigura.ItemsSource = Enum.GetValues(typeof(TipusFigura));
+            cbTipusFigura.SelectedItem = TipusFigura.Barres;
+            cbTipusAlgoritme.ItemsSource = Enum.GetValues(typeof(SortingAlgorithm));
+            cbTipusAlgoritme.SelectedItem = SortingAlgorithm.BubbleSort;
+            cbTipusAnimacio.ItemsSource = Enum.GetValues(typeof(TipusAnimacio));
+            cbTipusAnimacio.SelectedItem = TipusAnimacio.Desplaçament;
+            cbEasingMode.ItemsSource = Enum.GetValues(typeof(EasingMode));
+            cbEasingMode.SelectedItem = EasingMode.EaseInOut;
+            cbFuncioEasing.ItemsSource = Enum.GetValues(typeof(EasingFunction));
+            cbFuncioEasing.SelectedItem = EasingFunction.Bounce;
+
         }
 
         #endregion
@@ -168,16 +184,19 @@ namespace OrdenacionsPart1
         /// <param name="e"></param>
         private void btnOrdena_Click(object sender, RoutedEventArgs e)
         {
+            //Compare the cbTipusAlgoritme with the SortingAlgorithm enum
+
+
             stopSorting = false;
-            if(cbTipusAlgoritme.Text == "Bubble Sort")
+            if(cbTipusAlgoritme.Text == SortingAlgorithm.BubbleSort.ToString())
             {
                 DoBubbleSort();
             }
-            else if(cbTipusAlgoritme.Text == "Insertion Sort")
+            else if(cbTipusAlgoritme.Text == SortingAlgorithm.InsertionSort.ToString())
             {
                 DoInsertionSort();
             }
-            else if(cbTipusAlgoritme.Text == "Quick Sort")
+            else if(cbTipusAlgoritme.Text == SortingAlgorithm.QuickSort.ToString())
             {
                 DoQuickSort(numeros, 0, numeros.Count - 1);
             }
@@ -325,11 +344,11 @@ namespace OrdenacionsPart1
 
         private void PintaRectangle(int pos)
         {
-            if (cbTipusFigura.Text == "Barres")
+            if (cbTipusFigura.Text == TipusFigura.Barres.ToString())
             {
                 rectangles[pos].Height = numeros[pos] * (canvas.Height / (int)iudNElements.Value);
             }
-            else if (cbTipusFigura.Text == "Punts")
+            else if (cbTipusFigura.Text == TipusFigura.Punts.ToString())
             {
                 rectangles[pos].Height = rectangles[pos].Width;
             }
@@ -369,7 +388,7 @@ namespace OrdenacionsPart1
         /// <param name="e"></param>
         private void iudRadiColumnes_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if(cbTipusFigura != null && cbTipusFigura.Text == "Barres")
+            if(cbTipusFigura != null && cbTipusFigura.Text == TipusFigura.Barres.ToString())
             {
                 foreach (Rectangle rectangle in rectangles)
                 {
@@ -393,6 +412,7 @@ namespace OrdenacionsPart1
             int temp = numeros[pos1];
             numeros[pos1] = numeros[pos2];
             numeros[pos2] = temp;
+
             if (cbMarcaIntercanvis.IsChecked == true)
             {
                 rectangles[pos1].Fill = intercanviaBrush;
@@ -400,19 +420,29 @@ namespace OrdenacionsPart1
             }
 
             //Posar les animacions aqui
+            Anima(pos1, pos2);
 
             Espera((double)iudTempsPausa.Value);
-               
+
+            rectangles[pos1].BeginAnimation(Canvas.LeftProperty, null);
+            rectangles[pos2].BeginAnimation(Canvas.LeftProperty, null);
+            rectangles[pos1].BeginAnimation(HeightProperty, null);
+            rectangles[pos2].BeginAnimation(HeightProperty, null);
+
             PintaRectangle(pos1);
             PintaRectangle(pos2);
 
+
             DoEvents();
+            
         }
+
+        
 
         #endregion
 
         #region Tipus de figura
-        
+
 
         /// <summary>
         /// Mètode que al canviar el tipus de figura de punt a rectangle i a l'inversa
@@ -421,7 +451,7 @@ namespace OrdenacionsPart1
         /// <param name="e"></param>
         private void cbTipusFigura_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cbTipusFigura.Text != "Barres")
+            if (cbTipusFigura.Text != TipusFigura.Barres.ToString())
             {
                 for (int pos = 0; pos < rectangles.Count; pos++)
                 {
@@ -430,7 +460,7 @@ namespace OrdenacionsPart1
                     rectangles[pos].RadiusY = (double)iudRadiColumnes.Value;
                 }
             }
-            else if (cbTipusFigura.Text != "Punts")
+            else 
             {
                 for (int pos = 0; pos < rectangles.Count; pos++)
                 {
@@ -471,5 +501,145 @@ namespace OrdenacionsPart1
             base.OnClosed(e);
         }
         #endregion
+
+        private void Anima(int pos1, int pos2)
+        {
+            DoubleAnimation animacio1 = new DoubleAnimation();
+            DoubleAnimation animacio2 = new DoubleAnimation();
+            DoubleAnimation animacioAlcada1 = new DoubleAnimation();
+            DoubleAnimation animacioAlcada2 = new DoubleAnimation();
+            // Set the easing function depending on the selected easing function
+            if(cbEasing.IsChecked == true)
+            {
+                
+                if (cbFuncioEasing.Text == EasingFunction.Quadratic.ToString())
+                {
+                    animacio1.EasingFunction = new QuadraticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacio2.EasingFunction = new QuadraticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada1.EasingFunction = new QuadraticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada2.EasingFunction = new QuadraticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                }
+                else if (cbFuncioEasing.Text == EasingFunction.Cubic.ToString())
+                {
+                    animacio1.EasingFunction = new CubicEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacio2.EasingFunction = new CubicEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada1.EasingFunction = new CubicEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada2.EasingFunction = new CubicEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                }
+                else if (cbFuncioEasing.Text == EasingFunction.Quartic.ToString())
+                {
+                    animacio1.EasingFunction = new QuarticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacio2.EasingFunction = new QuarticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada1.EasingFunction = new QuarticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada2.EasingFunction = new QuarticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                }
+                else if (cbFuncioEasing.Text == EasingFunction.Quintic.ToString())
+                {
+                    animacio1.EasingFunction = new QuinticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacio2.EasingFunction = new QuinticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada1.EasingFunction = new QuinticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada2.EasingFunction = new QuinticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                }
+                else if (cbFuncioEasing.Text == EasingFunction.Sinusoidal.ToString())
+                {
+                    animacio1.EasingFunction = new SineEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacio2.EasingFunction = new SineEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada1.EasingFunction = new SineEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada2.EasingFunction = new SineEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                }
+                else if (cbFuncioEasing.Text == EasingFunction.Exponential.ToString())
+                {
+                    animacio1.EasingFunction = new ExponentialEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacio2.EasingFunction = new ExponentialEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada1.EasingFunction = new ExponentialEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada2.EasingFunction = new ExponentialEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                }
+                else if (cbFuncioEasing.Text == EasingFunction.Circular.ToString())
+                {
+                    animacio1.EasingFunction = new CircleEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacio2.EasingFunction = new CircleEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada1.EasingFunction = new CircleEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada2.EasingFunction = new CircleEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                }
+                else if (cbFuncioEasing.Text == EasingFunction.Elastic.ToString())
+                {
+                    animacio1.EasingFunction = new ElasticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacio2.EasingFunction = new ElasticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada1.EasingFunction = new ElasticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada2.EasingFunction = new ElasticEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                }
+                else if (cbFuncioEasing.Text == EasingFunction.Back.ToString())
+                {
+                    animacio1.EasingFunction = new BackEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacio2.EasingFunction = new BackEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada1.EasingFunction = new BackEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada2.EasingFunction = new BackEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                }
+                else if (cbFuncioEasing.Text == EasingFunction.Bounce.ToString())
+                {
+                    animacio1.EasingFunction = new BounceEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacio2.EasingFunction = new BounceEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada1.EasingFunction = new BounceEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                    animacioAlcada2.EasingFunction = new BounceEase() { EasingMode = (EasingMode)cbEasingMode.SelectedItem };
+                }
+            }
+            
+
+
+
+
+
+            if (cbTipusAnimacio.Text == TipusAnimacio.Desplaçament.ToString())
+            {
+                // Calculate the target positions for the animations
+                double targetPos1 = Canvas.GetLeft(rectangles[pos2]);
+                double targetPos2 = Canvas.GetLeft(rectangles[pos1]);
+
+                // Set up the animations
+                animacio1.From = Canvas.GetLeft(rectangles[pos1]);
+                animacio1.To = targetPos1;
+                animacio1.Duration = TimeSpan.FromSeconds((double)iudTempsPausa.Value/1000);
+
+                animacio2.From = Canvas.GetLeft(rectangles[pos2]);
+                animacio2.To = targetPos2;
+                animacio2.Duration = TimeSpan.FromSeconds((double)iudTempsPausa.Value/ 1000);
+
+                // Start the animations
+                rectangles[pos1].BeginAnimation(Canvas.LeftProperty, animacio1);
+                rectangles[pos2].BeginAnimation(Canvas.LeftProperty, animacio2);
+            }
+            else
+            {
+                //The animation should also be applied so the rectangle expands from the bottom
+                
+                if(cbTipusFigura.Text != TipusFigura.Punts.ToString())
+                {
+                    animacioAlcada1.By = Canvas.GetTop(rectangles[pos1]) - Canvas.GetTop(rectangles[pos2]);
+                    animacioAlcada1.Duration = TimeSpan.FromSeconds((double)iudTempsPausa.Value / 1000);
+                    animacioAlcada2.By = Canvas.GetTop(rectangles[pos2]) - Canvas.GetTop(rectangles[pos1]);
+                    animacioAlcada2.Duration = TimeSpan.FromSeconds((double)iudTempsPausa.Value / 1000);
+                    rectangles[pos1].BeginAnimation(HeightProperty, animacioAlcada1);
+                    rectangles[pos2].BeginAnimation(HeightProperty, animacioAlcada2);
+                }
+                
+                double targetPos1 = Canvas.GetTop(rectangles[pos2]);
+                double targetPos2 = Canvas.GetTop(rectangles[pos1]);
+
+                animacio1.From = Canvas.GetTop(rectangles[pos1]);
+                animacio1.To = targetPos1;
+                animacio1.Duration = TimeSpan.FromSeconds((double)iudTempsPausa.Value / 1000);
+
+                animacio2.From = Canvas.GetTop(rectangles[pos2]);
+                animacio2.To = targetPos2;
+                animacio2.Duration = TimeSpan.FromSeconds((double)iudTempsPausa.Value / 1000);
+
+                rectangles[pos1].BeginAnimation(Canvas.TopProperty, animacio1);
+                rectangles[pos2].BeginAnimation(Canvas.TopProperty, animacio2);
+                
+            }
+
+            
+            
+        }
     }
 }

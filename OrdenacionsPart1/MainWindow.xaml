@@ -45,15 +45,11 @@
                     </DockPanel>
                     <Label Content="Tipus de figures" FontSize="10" Foreground="Purple"/>
                     <ComboBox Name="cbTipusFigura" HorizontalAlignment="Stretch" SelectionChanged="cbTipusFigura_SelectionChanged" Margin="10,0" Foreground="Purple" BorderBrush="Purple" Background="Black">
-                        <ComboBoxItem Content="Barres" IsSelected="True"/>
-                        <ComboBoxItem Content="Punts"/>
+
                     </ComboBox>
                     <Label Content="Tipus d'ordenació" FontSize="10" Foreground="Purple"/>
-                    <!--Falta posar el contingut del combobox -->
                     <ComboBox Name="cbTipusAlgoritme" HorizontalAlignment="Stretch" Margin="10,0,10,15"  Foreground="Purple" BorderBrush="Purple" Background="Black">
-                        <ComboBoxItem Content="Bubble Sort" Name="cbiBubble" IsSelected="True"/>
-                        <ComboBoxItem Content="Insertion Sort" Name="cbiInsertion"/>
-                        <ComboBoxItem Content="Quick Sort" Name="cbiQuick"/>
+
                     </ComboBox>
 
                     <Border Background="Purple">
@@ -69,7 +65,34 @@
                     </DockPanel>
 
                     <Border Background="Purple">
+                        <Label Margin="10,0,0,0" Content="Animació" FontWeight="Bold" FontSize="15" Foreground="White"/>
+                    </Border>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Tipus d'animació" Foreground="Purple" FontWeight="Bold"/>
+                        <ComboBox Name="cbTipusAnimacio" HorizontalAlignment="Stretch" Margin="10,0,10,15"  Foreground="Purple" BorderBrush="Purple" Background="Black">
+
+                        </ComboBox>
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Easing" Foreground="Purple" FontWeight="Bold"/>
+                        <CheckBox Margin="10,0" Name="cbEasing" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Funció d'Easing" Foreground="Purple" FontWeight="Bold"/>
+                        <ComboBox Name="cbFuncioEasing" HorizontalAlignment="Stretch" Margin="10,0,10,15"  Foreground="Purple" BorderBrush="Purple" Background="Black">
+
+                        </ComboBox>
+                    </DockPanel>
+                    <DockPanel Margin="0,5">
+                        <Label DockPanel.Dock="Left" Content="Easing mode" Foreground="Purple" FontWeight="Bold"/>
+                        <ComboBox Name="cbEasingMode" HorizontalAlignment="Stretch" Margin="10,0,10,15"  Foreground="Purple" BorderBrush="Purple" Background="Black">
+
+                        </ComboBox>
+                    </DockPanel>
+
+                    <Border Background="Purple">
                         <Label Margin="10,0,0,0" Content="Colors" FontWeight="Bold" FontSize="15" Foreground="White"/>
+                        
                     </Border>
 
                     <DockPanel Margin="0,5">
